@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html>
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="description" content="Responsive Admin Template" />
+    <meta name="author" content="SmartUniversity" />
+    <title>Test Task</title>
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css" />
+    <!-- icons -->
+    <link href="../static/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!--bootstrap -->
+    <link href="../static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- data tables -->
+    <link href="../static/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Material Design Lite CSS -->
+    <link rel="stylesheet" href="../static/plugins/material/material.min.css">
+    <link rel="stylesheet" href="../static/css/material_style.css">
+    <!-- animation -->
+    <link href="../static/css/pages/animate_page.css" rel="stylesheet">
+    <!-- Template Styles -->
+    <link href="../static/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/style-new.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/theme-color.css" rel="stylesheet" type="text/css" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="../static/img/favicon.ico" />
+</head>
+<!-- END HEAD -->
+<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white dark-sidebar-color logo-dark">
+    <div class="page-header navbar navbar-fixed-top">
+        <text style="font: bold sans-serif; margin-left: 20px">Hello, {{ current_user.email }}</text>
+        <text style="font: bold sans-serif">Balance: {{ current_user.balance }}</text>
+        <div class="top-menu">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-user">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <text style="font: bold sans-serif">Settings</text>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default animated jello">
+                        <li><a href="user_profile.html"><i class="icon-user"></i>Profile</a></li>
+                        <li><a href="#"><i class="icon-settings"></i>Settings</a></li>
+                        <li><a href="#"><i class="icon-directions"></i>Help</a></li>
+                        <li class="divider"> </li>
+                        <li><a href="lock_screen.html"><i class="icon-lock"></i>Lock</a></li>
+                        <li><a href={{ url_for('logout') }}><i class="icon-logout"></i>Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-content-wrapper-new">
+        <div class="page-content-new">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="card card-box">
+                        <div class="card-head">
+                            <header>List of commodities</header>
+                            <div class="tools">
+                                <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-scrollable">
+                                <table class="table table-hover table-checkable order-column full-width" id="example1">
+                                    <thead>
+                                        <tr>
+                                            <th class="center">Commodity</th>
+                                            <th class="center">Price</th>
+                                            <th class="center">Rest</th>
+                                            <th class="center">Category</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for com in comties %}
+                                        <tr class="odd gradeX">
+                                            <td class="center">{{ com.name }}</td>
+                                            <td class="center">{{ com.price }}</td>
+                                            <td class="center">{{ com.rest }}</td>
+                                            <td class="center">{{ com.catry.name }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5 col-lg-5">
+                                    <form id="index1" name="index1" action={{ url_for('index') }} method="POST" novalidate>
+                                        <div class="form-group">
+                                            <text>Show only:</text>
+                                            <select name="category" onchange="this.form.submit()">
+                                                <option value="0">All</option>
+                                                {% for c in catries %}
+                                                <option value={{ c.id }} {% if sel == c.id %} selected {% endif %}>{{ c.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-sm-12 col-md-7 col-lg-7">
+                                    <form id="index2" name="index2" action={{ url_for('index') }} method="POST" novalidate>
+                                        <div class="form-group">
+                                            <text>Buy:</text>
+                                            <select name="commodity">
+                                                {% for com in comties %}
+                                                <option value={{ com.id }} {% if sele == com.id %} selected {% endif %}>{{ com.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <text>Count:</text>
+                                            <input name="count" type="number" min="1" max="500" value="1" style="margin-right:20px;width:60px" placeholder="1...500" required>
+                                            <button type="submit" class="btn btn-info">ОК</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {% if error %}<div style="text-align:center"><text style="font:16px; color:red">{{ error }}</text></div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="card card-box">
+                        <div class="card-head">
+                            <header>List of bought commodities</header>
+                            <div class="tools">
+                                <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-scrollable">
+                                <table class="table table-hover table-checkable order-column full-width" id="example4">
+                                    <thead>
+                                        <tr>
+                                            <th class="center">Commodity</th>
+                                            <th class="center">Price</th>
+                                            <th class="center">Count</th>
+                                            <th class="center">Category</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bc in boughtcomties %}
+                                        <tr class="odd gradeX">
+                                            <td class="center">{{ bc.comty.name }}</td>
+                                            <td class="center">{{ bc.comty.price }}</td>
+                                            <td class="center">{{ bc.count }}</td>
+                                            <td class="center">{{ bc.comty.catry.name }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            2019 &copy; Test Task
+            <a href="mailto:redstartheme@gmail.com" target="_top" class="makerCss">RedStar Theme</a>
+        </div>
+        <div class="scroll-to-top"><i class="icon-arrow-up"></i></div>
+    </div>
+    <!-- start js include path -->
+    <script src="../static/plugins/jquery/jquery.min.js"></script>
+    <script src="../static/plugins/popper/popper.min.js"></script>
+    <script src="../static/plugins/jquery-blockui/jquery.blockui.min.js"></script>
+    <script src="../static/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- bootstrap -->
+    <script src="../static/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- data tables -->
+    <script src="../static/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../static/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.js"></script>
+    <script src="../static/js/pages/table/table_data.js"></script>
+    <!-- Common js-->
+    <script src="../static/js/app.js"></script>
+    <script src="../static/js/layout.js"></script>
+    <script src="../static/js/theme-color.js"></script>
+    <!-- Material -->
+    <script src="../static/plugins/material/material.min.js"></script>
+    <!-- animation -->
+    <script src="../static/js/pages/ui/animations.js"></script>
+    <!-- end js include path -->
+</body>
+</html>
